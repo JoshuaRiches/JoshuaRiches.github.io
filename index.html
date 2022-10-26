@@ -21,10 +21,54 @@
         <div class="output" id="output">
             <img id="photo" alt="The photo will appear in this box"/>
         </div>
+
+        <div class="mainDiv">
+            <h1>Firebase File Upload</h1>
+            <progress id="uploader" value="0" max="100">0%</progress>
+            <input type="file" id="fileButton" value="upload"/>
+        </div>
     </div>
+    
+    <script src="https://www.gstatic.com/firebasejs/3.7.4/firebase.js"></script>
+    <script>
+        const firebaseConfig = {
+          apiKey: "AIzaSyAueT69-ZS7Rd3_jj57JKN_L9T6SxwIPuQ",
+          authDomain: "rt-golem.firebaseapp.com",
+          projectId: "rt-golem",
+          storageBucket: "rt-golem.appspot.com",
+          messagingSenderId: "1050569552754",
+          appId: "1:1050569552754:web:66d0da4b884a16a5f123eb"
+        };
+      
+        // Initialize Firebase
+        firebase.initializeApp(firebaseConfig);
+
+        var uploader = document.getElementById('uploader');
+        var fileButton =         document.getElementById('fileButton');
+
+        fileButton.addEventListener('change', function(e)
+        {
+            var file = e.target.files[0];
+            var storageRef = firebase.storage().ref('img/'+file.name);
+            var task = storageRef.put(file);
+            task.on('state_changed', function progress(snapshot) 
+            {
+                var percentage = (snapshot.bytesTransferred/snapshot.totalBytes)*100;
+                uploader.value = percentage;
+
+            }, 
+            function error(err) 
+            {},
+            function complete() 
+            {});
+        });  
+    </script>
+    
 
     <script>
+        
         (() => {
+
             let width = 0; // setting width here, gonna calculate height based on aspect ratio of input stream
             let height = 0;
 
@@ -139,6 +183,7 @@
 
                     const data = canvas.toDataURL("image/png");
                     photo.setAttribute("src", data);
+
                 } else{
                     clearPhoto();
                 }
@@ -149,5 +194,6 @@
         })();
         
     </script>
+
 </body>
 </html>
