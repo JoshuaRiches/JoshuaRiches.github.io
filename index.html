@@ -78,7 +78,7 @@
                     (ev) => {
                         if (!streaming){
                             // calculate height
-                            height = video.videoHeight / (video.videoWidth / width);
+                            height = video.videoHeight;
 
                             // if the browser cant get height of the stream (firefox cant)
                             if (isNaN(height)){
