@@ -18,14 +18,14 @@
 
         <canvas id="canvas"></canvas>
 
-        <div class="output">
-            <img id="photo" alt="The photo will appear in this box" style="object-fit: cover;"/>
+        <div class="output" id="output">
+            <img id="photo" alt="The photo will appear in this box"/>
         </div>
     </div>
 
     <script>
         (() => {
-            const width = 320; // setting width here, gonna calculate height based on aspect ratio of input stream
+            let width = 0; // setting width here, gonna calculate height based on aspect ratio of input stream
             let height = 0;
 
             let streaming = false; //indicates if video is being streamed right now or not
@@ -35,6 +35,7 @@
             let canvas = null;
             let photo = null;
             let startbutton = null;
+            let outputBox = null;
 
             function showViewLiveResultButton(){
                 if (window.self !== window.top){
@@ -60,6 +61,7 @@
                 canvas = document.getElementById("canvas");
                 photo = document.getElementById("photo");
                 startbutton = document.getElementById("startbutton");
+                outputBox = document.getElementById("output");
 
                 // get the users camera
                 navigator.mediaDevices
@@ -79,6 +81,7 @@
                         if (!streaming){
                             // calculate height
                             height = video.videoHeight;
+                            width = video.videoWidth;
 
                             // if the browser cant get height of the stream (firefox cant)
                             if (isNaN(height)){
@@ -127,6 +130,9 @@
                     canvas.width = width;
                     canvas.height = height;
                     context.drawImage(video, 0, 0, width, height);
+
+                    console.log("Height = ", height);
+                    console.log("Width = ", width);
 
                     const data = canvas.toDataURL("image/png");
                     photo.setAttribute("src", data);
