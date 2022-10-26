@@ -19,7 +19,7 @@
         <canvas id="canvas"></canvas>
 
         <div class="output">
-            <img id="photo" alt="The photo will appear in this box"/>
+            <img id="photo" alt="The photo will appear in this box" style="object-fit: cover;"/>
         </div>
     </div>
 
@@ -78,8 +78,7 @@
                     (ev) => {
                         if (!streaming){
                             // calculate height
-                            height = video.videoHeight;
-                            width = video.videoWidth;
+                            height = video.videoHeight / (video.videoWidth / width);
 
                             // if the browser cant get height of the stream (firefox cant)
                             if (isNaN(height)){
@@ -125,9 +124,9 @@
             function takePicture(){
                 const context = canvas.getContext("2d");
                 if (width && height){
-                    canvas.width = video.videoWidth;
-                    canvas.height = video.videoHeight;
-                    context.drawImage(video, 0, 0, video.videoWidth, video.videoHeight);
+                    canvas.width = width;
+                    canvas.height = height;
+                    context.drawImage(video, 0, 0, width, height);
 
                     const data = canvas.toDataURL("image/png");
                     photo.setAttribute("src", data);
