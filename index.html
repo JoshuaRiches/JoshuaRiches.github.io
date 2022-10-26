@@ -83,6 +83,9 @@
                             height = video.videoHeight;
                             width = video.videoWidth;
 
+                            outputBox.style.position = 'absolute';
+                            outputBox.style.left = '700px';
+
                             // if the browser cant get height of the stream (firefox cant)
                             if (isNaN(height)){
                                 height = width / (4/3);
