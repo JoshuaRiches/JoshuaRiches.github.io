@@ -26,7 +26,6 @@
         <div class="mainDiv">
             <h1>Firebase File Upload</h1>
             <progress id="uploader" value="0" max="100">0%</progress>
-            <input type="file" id="fileButton" value="upload" />
         </div>
     </div>
 
@@ -44,9 +43,6 @@
         // Initialize Firebase
         firebase.initializeApp(firebaseConfig);
 
-        var uploader = document.getElementById('uploader');
-        var fileButton = document.getElementById('fileButton');
-
     </script>
 
 
@@ -54,7 +50,6 @@
 
         (() =>
         {
-
             let width = 0; // setting width here, gonna calculate height based on aspect ratio of input stream
             let height = 0;
 
@@ -66,6 +61,8 @@
             let photo = null;
             let startbutton = null;
             let outputBox = null;
+
+            var uploader = document.getElementById('uploader');
 
             function showViewLiveResultButton()
             {
@@ -193,6 +190,16 @@
                 var file = dataURL2Blob(data);
                 var storageRef = firebase.storage().ref('img/' + "photo.png");
                 var task = storageRef.put(file);
+                task.on('state_changed', function progress(snapshot) 
+                {
+                var percentage = (snapshot.bytesTransferred/snapshot.totalBytes)*100;
+                uploader.value = percentage;
+
+                }, 
+                function error(err) 
+                {},
+                function complete() 
+                {});
             }
 
             function dataURL2Blob(dataURL)
