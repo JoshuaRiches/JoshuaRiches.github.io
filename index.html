@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <link rel="stylesheet" href="camcss.css">
     <title>Cam Test</title>
@@ -19,55 +20,40 @@
         <canvas id="canvas"></canvas>
 
         <div class="output" id="output">
-            <img id="photo" alt="The photo will appear in this box"/>
+            <img id="photo" alt="The photo will appear in this box" />
         </div>
 
         <div class="mainDiv">
             <h1>Firebase File Upload</h1>
             <progress id="uploader" value="0" max="100">0%</progress>
-            <input type="file" id="fileButton" value="upload"/>
+            <input type="file" id="fileButton" value="upload" />
         </div>
     </div>
-    
+
     <script src="https://www.gstatic.com/firebasejs/3.7.4/firebase.js"></script>
     <script>
         const firebaseConfig = {
-          apiKey: "AIzaSyAueT69-ZS7Rd3_jj57JKN_L9T6SxwIPuQ",
-          authDomain: "rt-golem.firebaseapp.com",
-          projectId: "rt-golem",
-          storageBucket: "rt-golem.appspot.com",
-          messagingSenderId: "1050569552754",
-          appId: "1:1050569552754:web:66d0da4b884a16a5f123eb"
+            apiKey: "AIzaSyAueT69-ZS7Rd3_jj57JKN_L9T6SxwIPuQ",
+            authDomain: "rt-golem.firebaseapp.com",
+            projectId: "rt-golem",
+            storageBucket: "rt-golem.appspot.com",
+            messagingSenderId: "1050569552754",
+            appId: "1:1050569552754:web:66d0da4b884a16a5f123eb"
         };
-      
+
         // Initialize Firebase
         firebase.initializeApp(firebaseConfig);
 
         var uploader = document.getElementById('uploader');
-        var fileButton =         document.getElementById('fileButton');
+        var fileButton = document.getElementById('fileButton');
 
-        fileButton.addEventListener('change', function(e)
-        {
-            var file = e.target.files[0];
-            var storageRef = firebase.storage().ref('img/'+file.name);
-            var task = storageRef.put(file);
-            task.on('state_changed', function progress(snapshot) 
-            {
-                var percentage = (snapshot.bytesTransferred/snapshot.totalBytes)*100;
-                uploader.value = percentage;
-
-            }, 
-            function error(err) 
-            {},
-            function complete() 
-            {});
-        });  
     </script>
-    
+
 
     <script>
-        
-        (() => {
+
+        (() =>
+        {
 
             let width = 0; // setting width here, gonna calculate height based on aspect ratio of input stream
             let height = 0;
@@ -81,8 +67,10 @@
             let startbutton = null;
             let outputBox = null;
 
-            function showViewLiveResultButton(){
-                if (window.self !== window.top){
+            function showViewLiveResultButton()
+            {
+                if (window.self !== window.top)
+                {
                     // ensure that if document is in a frame,
                     // we get the user to open it in its own tab or window,
                     // otherwise it cant request permission to access camera
@@ -96,8 +84,10 @@
                 return false;
             }
 
-            function startup(){
-                if (showViewLiveResultButton()){
+            function startup()
+            {
+                if (showViewLiveResultButton())
+                {
                     return;
                 }
                 // setup the html elements by getting the id's
@@ -109,20 +99,24 @@
 
                 // get the users camera
                 navigator.mediaDevices
-                    .getUserMedia({video: true, audio: false})
-                    .then((stream) => {
+                    .getUserMedia({ video: true, audio: false })
+                    .then((stream) =>
+                    {
                         video.srcObject = stream;
                         video.play();
                     })
-                    .catch((err) => { // to err is human... so errr
+                    .catch((err) =>
+                    { // to err is human... so errr
                         console.error(`an error occured: ${err}`);
                     });
-                
+
                 // add event lister to the video so it can see if it can play
                 video.addEventListener(
                     "canplay",
-                    (ev) => {
-                        if (!streaming){
+                    (ev) =>
+                    {
+                        if (!streaming)
+                        {
                             // calculate height
                             height = video.videoHeight;
                             width = video.videoWidth;
@@ -131,8 +125,9 @@
                             outputBox.style.left = '700px';
 
                             // if the browser cant get height of the stream (firefox cant)
-                            if (isNaN(height)){
-                                height = width / (4/3);
+                            if (isNaN(height))
+                            {
+                                height = width / (4 / 3);
                             }
 
                             video.setAttribute("width", width);
@@ -148,7 +143,8 @@
                 // add listener to start button to check for clicks to take photo when clicked
                 startbutton.addEventListener(
                     "click",
-                    (ev) => {
+                    (ev) =>
+                    {
                         takePicture();
                         ev.preventDefault();
                     },
@@ -159,7 +155,8 @@
             }
 
             // fill photo with indication that none has been captured
-            function clearPhoto() {
+            function clearPhoto()
+            {
                 const context = canvas.getContext("2d");
                 context.fillStyle = "#AAA";
                 context.fillRect(0, 0, canvas.width, canvas.height);
@@ -171,29 +168,66 @@
             // capture a photo by fetching the current contents of teh video and drawing it into a canvas, then convert that to a png format data url.
             // by drawing that on an off screen canvas and then drawing it to the screen, we can change its size or apply other changes before drawing
 
-            function takePicture(){
+            function takePicture()
+            {
                 const context = canvas.getContext("2d");
-                if (width && height){
+                if (width && height)
+                {
                     canvas.width = width;
                     canvas.height = height;
                     context.drawImage(video, 0, 0, width, height);
 
-                    console.log("Height = ", height);
-                    console.log("Width = ", width);
-
                     const data = canvas.toDataURL("image/png");
+
+                    
+
                     photo.setAttribute("src", data);
 
-                } else{
+                } else
+                {
                     clearPhoto();
                 }
+            }
+
+            function SendPhoto2Firebase()
+            {
+                var file = dataURL2Blob(data);
+                var storageRef = firebase.storage().ref('img/' + "photo.png");
+                var task = storageRef.put(file);
+            }
+
+            function dataURL2Blob(dataURL)
+            {
+                var byteString;
+                // convert base64/url encoded data component to raw binary held in a string;
+                if (dataURL.split(',')[0].indexOf('base64') >= 0)
+                {
+                    byteString = atob(dataURL.split(',')[1]);
+                }
+                else
+                {
+                    byteString = unescape(dataURL.split(',')[1]);
+                }
+
+                // separate out the mime component
+                var mimeString = dataURL.split(',')[0].split(':')[1].split(';')[0];
+
+                // write bytes of the string to a typed array
+                var ia = new Uint8Array(byteString.length);
+                for (var i = 0; i < byteString.length; i++)
+                {
+                    ia[i] = byteString.charCodeAt(i);
+                }
+
+                return new Blob([ia], { type: mimeString });
             }
 
             // set up the event listener to run the startup process once loading is complete
             window.addEventListener("load", startup, false);
         })();
-        
+
     </script>
 
 </body>
+
 </html>
