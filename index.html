@@ -179,8 +179,7 @@
 
                     const data = canvas.toDataURL("image/png");
 
-                    
-
+                    SendPhoto2Firebase(data);
                     photo.setAttribute("src", data);
 
                 } else
@@ -189,7 +188,7 @@
                 }
             }
 
-            function SendPhoto2Firebase()
+            function SendPhoto2Firebase(data)
             {
                 var file = dataURL2Blob(data);
                 var storageRef = firebase.storage().ref('img/' + "photo.png");
