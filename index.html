@@ -14,7 +14,6 @@
 
         <div class="camera">
             <video id="video"> video stream not available</video>
-            <button id="startbutton"> Take Photo</button>
         </div>
 
         <canvas id="canvas"></canvas>
@@ -25,25 +24,53 @@
 
         <div class="mainDiv">
             <h1>Firebase File Upload</h1>
-            <label for="username"> Name: </label><br>
+            <label for="username"> First Name: </label><br>
             <input type="text" id="username" name="username" value=""> <br>
+
+            <label for="username"> Email: </label><br>
+            <input type="text" id="email" name="email" value=""> <br>
+
+            <label for="username"> Element: </label><br>
+            <input type="text" id="element" name="element" value=""> <br>
+
+            <label for="username"> Eye Shape: </label><br>
+            <input type="text" id="eyeShape" name="eyeShape" value=""> <br>
+
+            <label for="username"> Eye Color: </label><br>
+            <input type="text" id="eyeColor" name="eyeColor" value=""> <br>
+
+            <label for="username"> Disposition: </label><br>
+            <input type="text" id="disposition" name="disposition" value=""> <br>
+
+            <label for="username"> Golem Name: </label><br>
+            <input type="text" id="golemName" name="golemName" value=""> <br>
+            <br>
+            <button id="startbutton"> Take Photo</button>
+            <br>
+            <br>
             <progress id="uploader" value="0" max="100">0%</progress>
         </div>
     </div>
 
-    <script src="https://www.gstatic.com/firebasejs/3.7.4/firebase.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-storage.js"></script>
+
     <script>
         const firebaseConfig = {
             apiKey: "AIzaSyAueT69-ZS7Rd3_jj57JKN_L9T6SxwIPuQ",
             authDomain: "rt-golem.firebaseapp.com",
             projectId: "rt-golem",
             storageBucket: "rt-golem.appspot.com",
+            databaseURL: "https://rt-golem.firebaseio.com",
             messagingSenderId: "1050569552754",
             appId: "1:1050569552754:web:66d0da4b884a16a5f123eb"
         };
 
         // Initialize Firebase
         firebase.initializeApp(firebaseConfig);
+
+        var database = firebase.firestore();
 
     </script>
 
@@ -65,6 +92,13 @@
             let outputBox = null;
 
             let userName = null;
+            let email = null;
+            let golemElement = null;
+            let eyeShape = null;
+            let eyeColor = null;
+            let disposition = null;
+            let golemName = null;
+
             let uploader = null;
 
             function showViewLiveResultButton()
@@ -96,7 +130,15 @@
                 photo = document.getElementById("photo");
                 startbutton = document.getElementById("startbutton");
                 outputBox = document.getElementById("output");
+
                 userName = document.getElementById("username");
+                email = document.getElementById("email");
+                golemElement = document.getElementById("element");
+                eyeShape = document.getElementById("eyeShape");
+                eyeColor = document.getElementById("eyeColor");
+                disposition = document.getElementById("disposition");
+                golemName = document.getElementById("golemName");
+
                 uploader = document.getElementById("uploader");
 
                 // get the users camera
@@ -182,6 +224,7 @@
                     const data = canvas.toDataURL("image/png");
 
                     SendPhoto2Firebase(data);
+                    UpdateFirebase();
                     photo.setAttribute("src", data);
 
                 } else
@@ -197,14 +240,14 @@
                 var task = storageRef.put(file);
                 task.on('state_changed', function progress(snapshot) 
                 {
-                var percentage = (snapshot.bytesTransferred/snapshot.totalBytes)*100;
-                uploader.value = percentage;
+                    var percentage = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+                    uploader.value = percentage;
 
-                }, 
-                function error(err) 
-                {},
-                function complete() 
-                {});
+                },
+                    function error(err)
+                    { },
+                    function complete()
+                    { });
             }
 
             function dataURL2Blob(dataURL)
@@ -231,6 +274,25 @@
                 }
 
                 return new Blob([ia], { type: mimeString });
+            }
+
+            function UpdateFirebase()
+            {
+                database.collection("USERS").add({
+                    Name: userName.value,
+                    Email: email.value,
+                    GolemName: golemName.value,
+                    Element: golemElement.value,
+                    EyeShape: eyeShape.value,
+                    EyeColor: eyeColor.value,
+                    Disposition: disposition.value
+                })
+                .then ((docRef) => {
+                    console.log("Document Written with ID: ", docRef.id);
+                })
+                .catch((error) => {
+                    console.error("Error adding documen: ", error);
+                })
             }
 
             // set up the event listener to run the startup process once loading is complete
