@@ -25,6 +25,8 @@
 
         <div class="mainDiv">
             <h1>Firebase File Upload</h1>
+            <label for="username"> Name: </label><br>
+            <input type="text" id="username" name="username" value=""> <br>
             <progress id="uploader" value="0" max="100">0%</progress>
         </div>
     </div>
@@ -62,7 +64,8 @@
             let startbutton = null;
             let outputBox = null;
 
-            var uploader = document.getElementById('uploader');
+            let userName = null;
+            let uploader = null;
 
             function showViewLiveResultButton()
             {
@@ -93,6 +96,8 @@
                 photo = document.getElementById("photo");
                 startbutton = document.getElementById("startbutton");
                 outputBox = document.getElementById("output");
+                userName = document.getElementById("username");
+                uploader = document.getElementById("uploader");
 
                 // get the users camera
                 navigator.mediaDevices
@@ -188,7 +193,7 @@
             function SendPhoto2Firebase(data)
             {
                 var file = dataURL2Blob(data);
-                var storageRef = firebase.storage().ref('img/' + "photo.png");
+                var storageRef = firebase.storage().ref('img/' + userName.value + ".png");
                 var task = storageRef.put(file);
                 task.on('state_changed', function progress(snapshot) 
                 {
