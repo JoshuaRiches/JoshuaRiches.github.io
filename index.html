@@ -23,34 +23,67 @@
         </div>
 
         <div class="mainDiv">
-            <h1>Firebase File Upload</h1>
+            <br>
+            <button id="startbutton"> Take Photo</button>
+            <br>
+            <br>
             <label for="username"> First Name: </label><br>
             <input type="text" id="username" name="username" value=""> <br>
 
             <label for="username"> Email: </label><br>
             <input type="text" id="email" name="email" value=""> <br>
 
-            <label for="username"> Element: </label><br>
-            <input type="text" id="element" name="element" value=""> <br>
-
-            <label for="username"> Eye Shape: </label><br>
-            <input type="text" id="eyeShape" name="eyeShape" value=""> <br>
-
-            <label for="username"> Eye Color: </label><br>
-            <input type="text" id="eyeColor" name="eyeColor" value=""> <br>
-
-            <label for="username"> Disposition: </label><br>
-            <input type="text" id="disposition" name="disposition" value=""> <br>
-
             <label for="username"> Golem Name: </label><br>
             <input type="text" id="golemName" name="golemName" value=""> <br>
             <br>
-            <button id="startbutton"> Take Photo</button>
             <br>
-            <br>
-            <progress id="uploader" value="0" max="100">0%</progress>
         </div>
     </div>
+
+    <h2> Element </h2>
+    <div class="wrapper">
+        <div class="elementBox 0"> <img src="fireIcon.png" style="width: 50px;"> </div>
+        <div class="elementBox 1"> <img src="waterIcon.png" style="width: 50px;"> </div>
+        <div class="elementBox 2"> <img src="windIcon.png" style="width: 50px;"> </div>
+        <div class="elementBox 3"> <img src="plantIcon.png" style="width: 50px;"> </div>
+        <div class="elementBox 4"> <img src="stoneIcon.png" style="width: 50px;"> </div>
+    </div>
+    <br>
+    <br>
+    <h2> Eye Shape </h2>
+    <div class="wrapper">
+        <div class="eyeShapeBox 0"> <img src="eye1.png" style="width: 75px;"> </div>
+        <div class="eyeShapeBox 1"> <img src="eye2.png" style="width: 75px;"> </div>
+        <div class="eyeShapeBox 2"> <img src="eye3.png" style="width: 75px;"> </div>
+        <div class="eyeShapeBox 3"> <img src="eye4.png" style="width: 75px;"> </div>
+        <div class="eyeShapeBox 4"> <img src="eye5.png" style="width: 75px;"> </div>
+    </div>
+    <br>
+    <br>
+    <h2> Eye Color </h2>
+    <div class="wrapper">
+        <div class="eyeColorBox 0"> <img src="blue.png" style="width: 75px;"> </div>
+        <div class="eyeColorBox 1"> <img src="green.png" style="width: 75px;"> </div>
+        <div class="eyeColorBox 2"> <img src="brown.png" style="width: 75px;"> </div>
+        <div class="eyeColorBox 3"> <img src="red.png" style="width: 75px;"> </div>
+        <div class="eyeColorBox 4"> <img src="purple.png" style="width: 75px;"> </div>
+    </div>
+    <br>
+    <br>
+    <h2> Disposition </h2>
+    <div class="wrapper">
+        <!-- these are example dispositions, they are yet to be decided -->
+        <div class="dispositionBox 0"> Happy </div>
+        <div class="dispositionBox 1"> Sad </div>
+        <div class="dispositionBox 2"> Angry </div>
+        <div class="dispositionBox 3"> Hungry </div>
+        <div class="dispositionBox 4"> Confused </div>
+    </div>
+
+    <br>
+    <button id="submitButton"> Submit</button>
+    <br>
+    <progress id="uploader" value="0" max="100">0%</progress>
 
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
@@ -90,18 +123,20 @@
             let photo = null;
             let startbutton = null;
             let outputBox = null;
+            let submitButton = null;
+            let uploader = null;
 
+            let photoData = null;
+
+            // FUNCTIONS FOR CONTENT GOING TO FIREBASE
             let userName = null;
             let email = null;
-            let golemElement = null;
-            let eyeShape = null;
-            let eyeColor = null;
-            let disposition = null;
             let golemName = null;
-
+            var golemElement = 0;
+            var eyeColor = 0;
+            var eyeShape = 0;
+            var disposition = 0;
             let imageLink = null;
-
-            let uploader = null;
 
             function showViewLiveResultButton()
             {
@@ -135,10 +170,6 @@
 
                 userName = document.getElementById("username");
                 email = document.getElementById("email");
-                golemElement = document.getElementById("element");
-                eyeShape = document.getElementById("eyeShape");
-                eyeColor = document.getElementById("eyeColor");
-                disposition = document.getElementById("disposition");
                 golemName = document.getElementById("golemName");
 
                 uploader = document.getElementById("uploader");
@@ -231,25 +262,22 @@
                         len = dataSrc.length, i = 0, luma;
 
                     // convert by iterating over each pixel each representing RGBA
-                    for(; i < len; i += 4) 
+                    for (; i < len; i += 4) 
                     {
                         // calculate luma, here using Rec 709
-                        luma = dataSrc[i] * 0.2126 + dataSrc[i+1] * 0.7152 + dataSrc[i+2] * 0.0722;
+                        luma = dataSrc[i] * 0.2126 + dataSrc[i + 1] * 0.7152 + dataSrc[i + 2] * 0.0722;
 
                         // update target's RGB using the same luma value for all channels
-                        dataTrg[i] = dataTrg[i+1] = dataTrg[i+2] = luma;
-                        dataTrg[i+3] = dataSrc[i+3];                            // copy alpha
+                        dataTrg[i] = dataTrg[i + 1] = dataTrg[i + 2] = luma;
+                        dataTrg[i + 3] = dataSrc[i + 3];                            // copy alpha
                     }
 
                     // put back luma data so we can save it as image
                     context.putImageData(idataTrg, 0, 0);
-                    const data = canvas.toDataURL("image/png");
+                    photoData = canvas.toDataURL("image/png");
 
                     context.putImageData(idataSrc, 0, 0);
                     const srcData = canvas.toDataURL("image/png");
-
-                    SendPhoto2Firebase(data);
-                    UpdateFirebase();
 
                     photo.setAttribute("src", srcData);
 
@@ -259,10 +287,12 @@
                 }
             }
 
-            function SendPhoto2Firebase(data)
+            //------------------------------ firebase update code -----------------------------------
+
+            function SendPhoto2Firebase(data, name)
             {
                 var file = dataURL2Blob(data);
-                var storageRef = firebase.storage().ref('img/' + userName.value + ".png");
+                var storageRef = firebase.storage().ref('img/' + name + ".png");
 
                 imageLink = storageRef.toString();
 
@@ -273,10 +303,12 @@
                     uploader.value = percentage;
 
                 },
-                    function error(err)
-                    { },
-                    function complete()
-                    { });
+                function error(err)
+                { },
+                function complete()
+                { });
+
+                database.collection("USERS").doc(name).update({Photo: imageLink});
             }
 
             function dataURL2Blob(dataURL)
@@ -305,28 +337,92 @@
                 return new Blob([ia], { type: mimeString });
             }
 
-            function UpdateFirebase()
+            function UpdateFirebase(data)
             {
+
                 database.collection("USERS").add({
                     Name: userName.value,
                     Email: email.value,
                     GolemName: golemName.value,
-                    Element: golemElement.value,
-                    EyeShape: eyeShape.value,
-                    EyeColor: eyeColor.value,
-                    Disposition: disposition.value,
-                    Photo: imageLink
+                    Element: golemElement,
+                    EyeShape: eyeShape,
+                    EyeColor: eyeColor,
+                    Dispositon: disposition
                 })
-                .then ((docRef) => {
-                    console.log("Document Written with ID: ", docRef.id);
-                })
-                .catch((error) => {
-                    console.error("Error adding documen: ", error);
-                })
+                    .then((docRef) =>
+                    {
+                        console.log("Document Written with ID: ", docRef.id);
+                        SendPhoto2Firebase(data, docRef.id);
+                    })
+                    .catch((error) =>
+                    {
+                        console.error("Error adding documen: ", error);
+                    })
             }
 
             // set up the event listener to run the startup process once loading is complete
             window.addEventListener("load", startup, false);
+
+
+            //---------------------------- Initialise buttons code ------------------------
+
+            window.addEventListener("DOMContentLoaded", function()
+            {
+                // Submit Button
+                submitButton = document.getElementById("submitButton");
+
+                submitButton.addEventListener(
+                    "click",
+                    (ev) =>
+                    {
+                        UpdateFirebase(photoData);
+                        ev.preventDefault();
+                    },
+                    false
+                );
+
+                // customisation buttons
+                let elementBoxes = document.querySelectorAll(".elementBox");
+                let eyeColorBoxes = document.querySelectorAll(".eyeColorBox");
+                let eyeShapeBoxes = document.querySelectorAll(".eyeShapeBox");
+                let dispositionBoxes = document.querySelectorAll(".dispositionBox");
+
+                // get the element clicked
+                Array.from(elementBoxes, function(box)
+                {
+                    box.addEventListener("click", function() 
+                    {
+                        golemElement = this.classList[1];
+                    });
+                });
+
+                // get the eye shape clicked
+                Array.from(eyeShapeBoxes, function(box)
+                {
+                    box.addEventListener("click", function() 
+                    {
+                        eyeShape = this.classList[1];
+                    });
+                });
+
+                // get the eye color clicked
+                Array.from(eyeColorBoxes, function(box)
+                {
+                    box.addEventListener("click", function() 
+                    {
+                        eyeColor = this.classList[1];
+                    });
+                });
+
+                // get the disposition clicked
+                Array.from(dispositionBoxes, function(box)
+                {
+                    box.addEventListener("click", function() 
+                    {
+                        disposition = this.classList[1];
+                    });
+                });
+            });
         })();
 
     </script>

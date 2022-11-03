@@ -1,35 +1,92 @@
 #video {
-    border: 1px solid black;
-    box-shadow: 2px 2px 3px black;
-  }
-  
-  #photo {
-    border: 1px solid black;
-    box-shadow: 2px 2px 3px black;
-  }
-  
-  #canvas {
-    display: none;
-  }
-  
-  .camera {
-    width: 340px;
-    display: inline-block;
-  }
-  
-  .output {
-    display: inline-block;
-    vertical-align: top;
-  }
-  
-  #startbutton {
-    width: 100px;
-    height: 50px;
-    background-color: rgb(119, 119, 119);
-    font-size: 14px;
-    color: rgba(255, 255, 255, 1);
-  }
-  
-  .contentarea {
-    font-size: 16px;
-  }
+  border: 1px solid black;
+  box-shadow: 2px 2px 3px black;
+}
+
+#photo {
+  border: 1px solid black;
+  box-shadow: 2px 2px 3px black;
+}
+
+#canvas {
+  display: none;
+}
+
+.camera {
+  width: 340px;
+  display: inline-block;
+}
+
+.output {
+  display: inline-block;
+  vertical-align: top;
+}
+
+#startbutton {
+  width: 100px;
+  height: 50px;
+  background-color: rgb(119, 119, 119);
+  font-size: 14px;
+  color: rgba(255, 255, 255, 1);
+}
+
+.contentarea {
+  font-size: 16px;
+}
+
+.wrapper {
+  display: grid;
+  grid-template-columns: 100px 100px 100px 100px 100px;
+  grid-template-rows: 100px;
+  grid-gap: 10px;
+  background-color: #fff;
+  color: #444;
+}
+
+.elementBox {
+  background-color: rgb(156, 156, 156);
+  color: #fff;
+  border-radius: 5px;
+  font-size: 150%;
+  cursor: pointer;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.eyeShapeBox {
+  background-color: rgb(156, 156, 156);
+  color: #fff;
+  border-radius: 5px;
+  font-size: 150%;
+  cursor: pointer;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.eyeColorBox {
+  background-color: rgb(156, 156, 156);
+  color: #fff;
+  border-radius: 5px;
+  font-size: 150%;
+  cursor: pointer;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.dispositionBox {
+  background-color: rgb(156, 156, 156);
+  color: rgb(0, 0, 0);
+  border-radius: 5px;
+  font-size: 150%;
+  cursor: pointer;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
