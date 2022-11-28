@@ -393,6 +393,11 @@
                     box.addEventListener("click", function() 
                     {
                         golemElement = this.classList[1];
+
+                        elementBoxes.forEach(element => {
+                            if (element == box) {element.style.border = "thick solid #FFFF33";}
+                            else{element.style.border = "thick solid #444";}
+                        });
                     });
                 });
 
@@ -402,6 +407,11 @@
                     box.addEventListener("click", function() 
                     {
                         eyeShape = this.classList[1];
+
+                        eyeShapeBoxes.forEach(element => {
+                            if (element == box) {element.style.border = "thick solid #FFFF33";}
+                            else{element.style.border = "thick solid #444";}
+                        });
                     });
                 });
 
@@ -411,6 +421,11 @@
                     box.addEventListener("click", function() 
                     {
                         eyeColor = this.classList[1];
+
+                        eyeColorBoxes.forEach(element => {
+                            if (element == box) {element.style.border = "thick solid #FFFF33";}
+                            else{element.style.border = "thick solid #444";}
+                        });
                     });
                 });
 
@@ -420,6 +435,11 @@
                     box.addEventListener("click", function() 
                     {
                         disposition = this.classList[1];
+
+                        dispositionBoxes.forEach(element => {
+                            if (element == box) {element.style.border = "thick solid #FFFF33";}
+                            else{element.style.border = "thick solid #444";}
+                        });
                     });
                 });
             });

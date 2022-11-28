@@ -53,6 +53,8 @@
   display: flex;
   justify-content: center;
   align-items: center;
+
+  border: thick solid #444;
 }
 
 .eyeShapeBox {
@@ -65,6 +67,8 @@
   display: flex;
   justify-content: center;
   align-items: center;
+
+  border: thick solid #444;
 }
 
 .eyeColorBox {
@@ -77,6 +81,8 @@
   display: flex;
   justify-content: center;
   align-items: center;
+
+  border: thick solid #444;
 }
 
 .dispositionBox {
@@ -89,4 +95,6 @@
   display: flex;
   justify-content: center;
   align-items: center;
+
+  border: thick solid #444;
 }
