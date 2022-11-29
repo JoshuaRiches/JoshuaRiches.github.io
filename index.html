@@ -2,39 +2,30 @@
 <html lang="en">
 
 <head>
-    <link rel="stylesheet" href="camcss.css">
-    <title>Cam Test</title>
+    <link rel="stylesheet" href="golem.css">
+    <title>Golem Customisation</title>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 </head>
 
 <body>
     <div class="contentarea">
-        <h1> Photo Capture Test</h1>
-
-        <div class="camera">
-            <video id="video"> video stream not available</video>
-        </div>
-
-        <canvas id="canvas"></canvas>
-
-        <div class="output" id="output">
-            <img id="photo" alt="The photo will appear in this box" />
-        </div>
-
         <div class="mainDiv">
             <br>
-            <button id="startbutton"> Take Photo</button>
+            <label for="username" class="inputLabel"> First Name: </label><br>
+            <input class="inputBox" type="text" id="username" name="username" value=""> 
             <br>
             <br>
-            <label for="username"> First Name: </label><br>
-            <input type="text" id="username" name="username" value=""> <br>
 
-            <label for="username"> Email: </label><br>
-            <input type="text" id="email" name="email" value=""> <br>
+            <label class="inputLabel" for="username"> Email: </label><br>
+            <input class="inputBox" type="text" id="email" name="email" value=""> 
+            <br>
+            <br>
 
-            <label for="username"> Golem Name: </label><br>
-            <input type="text" id="golemName" name="golemName" value=""> <br>
+            <label class="inputLabel" for="username"> Golem Name: </label><br>
+            <input class="inputBox" type="text" id="golemName" name="golemName" value=""> 
+            <br>
+            <br>
             <br>
             <br>
         </div>
@@ -80,10 +71,24 @@
         <div class="dispositionBox 4"> Confused </div>
     </div>
 
+    <!-- Photo Capture -->
+    <h1> Photo </h1>
+    <div class="camera">
+        <video id="video"> video stream not available</video>
+    </div>
+    <canvas id="canvas"></canvas>
     <br>
-    <button id="submitButton"> Submit</button>
-    <br>
-    <progress id="uploader" value="0" max="100">0%</progress>
+    <button id="startbutton" style="margin-top: 50px;"> Take Photo</button>
+    </div>
+
+    <!-- upload data button -->
+    <div class="submitSector">
+        <button id="submitButton" class="submitButton"> Submit</button>
+        <progress style="width: 300px;" id="uploader" value="0" max="100">0%</progress>
+    </div>
+
+
+    <!----------------------------------------------- SCRIPTS --------------------------------------------------------->
 
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
