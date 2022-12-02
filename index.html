@@ -75,16 +75,22 @@
     <h1> Photo </h1>
     <div class="camera">
         <video id="video"> video stream not available</video>
+        <canvas class="circle" id="circle"></canvas>
     </div>
     <canvas id="canvas"></canvas>
+    
+    <div class="output" id="output">
+        <img id="photo" alt="The photo will appear in this box" />
+    </div>
     <br>
-    <button id="startbutton" style="margin-top: 50px;"> Take Photo</button>
+    <button id="takePhoto" style="margin-top: 0px;"> Take Photo</button>
+    <button id="redoPhoto" style="margin-top: 0px;"> Retake Photo</button>
     </div>
 
     <!-- upload data button -->
     <div class="submitSector">
         <button id="submitButton" class="submitButton"> Submit</button>
-        <progress style="width: 300px;" id="uploader" value="0" max="100">0%</progress>
+        <progress class="progressBar" id="uploader" value="0" max="100">0%</progress>
     </div>
 
 
@@ -169,8 +175,10 @@
                 // setup the html elements by getting the id's
                 video = document.getElementById("video");
                 canvas = document.getElementById("canvas");
+                circle = document.getElementById("circle");
                 photo = document.getElementById("photo");
-                startbutton = document.getElementById("startbutton");
+                takephotobtn = document.getElementById("takePhoto");
+                redobutton = document.getElementById("redoPhoto");
                 outputBox = document.getElementById("output");
 
                 userName = document.getElementById("username");
@@ -186,6 +194,8 @@
                     {
                         video.srcObject = stream;
                         video.play();
+                        
+                        
                     })
                     .catch((err) =>
                     { // to err is human... so errr
@@ -203,8 +213,8 @@
                             height = video.videoHeight;
                             width = video.videoWidth;
 
-                            outputBox.style.position = 'absolute';
-                            outputBox.style.left = '700px';
+                            //outputBox.style.position = 'absolute';
+                            //outputBox.style.left = '700px';
 
                             // if the browser cant get height of the stream (firefox cant)
                             if (isNaN(height))
@@ -216,14 +226,25 @@
                             video.setAttribute("height", height);
                             canvas.setAttribute("width", width);
                             canvas.setAttribute("height", height);
+
                             streaming = true;
+                            
+                            circle.setAttribute("width", width);
+                            circle.setAttribute("height", height);
+
+                            var ctx = circle.getContext("2d");
+                            ctx.strokeStyle = "#00FF00";
+                            ctx.lineWidth = 3;
+                            ctx.beginPath();
+                            ctx.arc(width/2, height/2, 150, 0, 2 * Math.PI);
+                            ctx.stroke();
                         }
                     },
                     false
                 );
 
                 // add listener to start button to check for clicks to take photo when clicked
-                startbutton.addEventListener(
+                takephotobtn.addEventListener(
                     "click",
                     (ev) =>
                     {
@@ -233,7 +254,24 @@
                     false
                 );
 
+                redobutton.addEventListener(
+                    "click",
+                    (ev) =>
+                    {
+                        ResumeVideo();
+                        ev.preventDefault();
+                    },
+                    false
+                );
+
                 clearPhoto();
+            }
+
+            function ResumeVideo()
+            {
+                redobutton.style.display = "none";
+                takephotobtn.style.display = "block";
+                video.play(); 
             }
 
             // fill photo with indication that none has been captured
@@ -252,6 +290,8 @@
 
             function takePicture()
             {
+                video.pause();
+
                 const context = canvas.getContext("2d");
                 if (width && height)
                 {
@@ -286,10 +326,18 @@
 
                     photo.setAttribute("src", srcData);
 
+                    showRedoBtn();               
+
                 } else
                 {
                     clearPhoto();
                 }
+            }
+
+            function showRedoBtn()
+            {
+                takephotobtn.style.display = "none"; 
+                redobutton.style.display = "block";
             }
 
             //------------------------------ firebase update code -----------------------------------
@@ -311,7 +359,9 @@
                 function error(err)
                 { },
                 function complete()
-                { });
+                {
+                    setTimeout(HideProgressBar, 1000);
+                });
 
                 database.collection("USERS").doc(name).update({Photo: imageLink});
             }
@@ -368,6 +418,11 @@
             // set up the event listener to run the startup process once loading is complete
             window.addEventListener("load", startup, false);
 
+            function HideProgressBar()
+            {
+                uploader.style.visibility = "hidden";
+            }
+
 
             //---------------------------- Initialise buttons code ------------------------
 
@@ -380,6 +435,7 @@
                     "click",
                     (ev) =>
                     {
+                        uploader.style.visibility = "visible";
                         UpdateFirebase(photoData);
                         ev.preventDefault();
                     },
