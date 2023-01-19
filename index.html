@@ -407,7 +407,7 @@
                     .then((docRef) =>
                     {
                         console.log("Document Written with ID: ", docRef.id);
-                        SendPhoto2Firebase(data, docRef.id);
+                        SendPhoto2Firebase(data, email.value);
                     })
                     .catch((error) =>
                     {
