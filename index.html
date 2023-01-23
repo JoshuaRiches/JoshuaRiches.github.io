@@ -149,6 +149,8 @@
             var disposition = 0;
             let imageLink = null;
 
+            var imageData = null;
+
             function showViewLiveResultButton()
             {
                 if (window.self !== window.top)
@@ -402,7 +404,8 @@
                     Element: golemElement,
                     EyeShape: eyeShape,
                     EyeColor: eyeColor,
-                    Disposition: disposition
+                    Disposition: disposition,
+                    ImageData: imageData
                 })
                     .then((docRef) =>
                     {
