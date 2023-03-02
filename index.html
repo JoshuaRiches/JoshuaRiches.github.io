@@ -410,7 +410,9 @@
                     .then((docRef) =>
                     {
                         console.log("Document Written with ID: ", docRef.id);
-                        SendPhoto2Firebase(data, email.value);
+                        var photoName = email.value.slice(0, email.value.indexOf('@'));
+                        console.log(photoName);
+                        SendPhoto2Firebase(data, photoName.value);
                     })
                     .catch((error) =>
                     {
