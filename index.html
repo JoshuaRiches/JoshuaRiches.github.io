@@ -386,7 +386,7 @@
                         }
                     }
 
-                    console.log(imageData);
+                    //-------------------------------------------------------------------------------------------
 
                     showRedoBtn();
 
@@ -442,29 +442,29 @@
 
             //------------------------------ firebase update code -----------------------------------
 
-            function SendPhoto2Firebase(data, name)
-            {
-                var file = dataURL2Blob(data);
-                var storageRef = firebase.storage().ref('img/' + name + ".png");
+            // function SendPhoto2Firebase(data, name)
+            // {
+            //     var file = dataURL2Blob(data);
+            //     var storageRef = firebase.storage().ref('img/' + name + ".png");
 
-                imageLink = storageRef.toString();
+            //     imageLink = storageRef.toString();
 
-                var task = storageRef.put(file);
-                task.on('state_changed', function progress(snapshot) 
-                {
-                    var percentage = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
-                    uploader.value = percentage;
+            //     var task = storageRef.put(file);
+            //     task.on('state_changed', function progress(snapshot) 
+            //     {
+            //         var percentage = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+            //         uploader.value = percentage;
 
-                },
-                    function error(err)
-                    { },
-                    function complete()
-                    {
-                        setTimeout(HideProgressBar, 1000);
-                    });
+            //     },
+            //         function error(err)
+            //         { },
+            //         function complete()
+            //         {
+            //             setTimeout(HideProgressBar, 1000);
+            //         });
 
-                database.collection("USERS").doc(name).update({ Photo: imageLink });
-            }
+            //     database.collection("USERS").doc(name).update({ Photo: imageLink });
+            // }
 
             function dataURL2Blob(dataURL)
             {
@@ -508,20 +508,20 @@
                     .then((docRef) =>
                     {
                         console.log("Document Written with ID: ", docRef.id);
-                        var emailArray = Array.from(email.value);
-                        var photoName = "";
-                        for (let i = 0; i < emailArray.length; i++)
-                        {
-                            if (emailArray[i] == "@" || emailArray[i] == ".")
-                            {
-                                photoName += "-";
-                            }
-                            else
-                            {
-                                photoName += emailArray[i];
-                            }
-                        }
-                        SendPhoto2Firebase(data, photoName);
+                        // var emailArray = Array.from(email.value);
+                        // var photoName = "";
+                        // for (let i = 0; i < emailArray.length; i++)
+                        // {
+                        //     if (emailArray[i] == "@" || emailArray[i] == ".")
+                        //     {
+                        //         photoName += "-";
+                        //     }
+                        //     else
+                        //     {
+                        //         photoName += emailArray[i];
+                        //     }
+                        // }
+                        // SendPhoto2Firebase(data, photoName);
                     })
                     .catch((error) =>
                     {
